@@ -241,11 +241,13 @@ struct _GStrvBuilder {};
 
 #define GLIB_DISABLE_DEPRECATION_WARNINGS
 #define G_SETTINGS_ENABLE_BACKEND
+#if !defined(_WIN32)
 #include <unistd.h>
 #include <termios.h>
 #include <sys/types.h>
 #include <pwd.h>
 #include <glib-unix.h>
+#endif
 #include <glib-object.h>
 #include <gobject/gvaluecollector.h>
 #include <gmodule.h>
@@ -321,14 +323,15 @@ typedef enum {
 #include <glib/gvarianttype.h>
 #include <gio/gio.h>
 #include <gio/gnetworking.h>
-#if !defined(__APPLE__) || (GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 60)
+#if !defined(_WIN32)
+# if !defined(__APPLE__) || (GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 60)
 #include <gio/gdesktopappinfo.h>
-#else
+# else
 #include <gio/gioenums.h>
-# ifdef __APPLE__
+#  ifdef __APPLE__
 #include <gio/gosxappinfo.h>
+#  endif
 # endif
-#endif
 #include <gio/gfiledescriptorbased.h>
 #include <gio/gunixconnection.h>
 #include <gio/gunixcredentialsmessage.h>
@@ -338,6 +341,7 @@ typedef enum {
 #include <gio/gunixmounts.h>
 #include <gio/gunixoutputstream.h>
 #include <gio/gunixsocketaddress.h>
+#endif
 #include <gio/gsettingsbackend.h>
 
 #ifndef G_VALUE_INTERNED_STRING

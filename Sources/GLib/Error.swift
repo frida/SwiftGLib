@@ -5,10 +5,14 @@
 //  Created by Rene Hexel on 27/04/2017.
 //  Copyright © 2017, 2019, 2020 Rene Hexel.  All rights reserved.
 //
-#if os(Linux)
-    import Glibc
-#else
+#if canImport(Darwin)
     import Darwin
+#elseif canImport(Glibc)
+    import Glibc
+#elseif canImport(Musl)
+    import Musl
+#elseif canImport(ucrt)
+    import ucrt
 #endif
 
 import CGLib

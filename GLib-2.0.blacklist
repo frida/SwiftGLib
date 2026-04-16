@@ -6,3 +6,6 @@ macro__has_attribute___noreturn__
 macro__has_attribute_ifunc
 macro__has_attribute_no_sanitize_address
 MainContextPusher
+HAVE_GNUC_VARARGS
+HAVE_GNUC_VISIBILITY
+win32_get_system_data_dirs_for_module
