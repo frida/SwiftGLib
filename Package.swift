@@ -2,6 +2,12 @@
 
 import PackageDescription
 
+#if os(Windows)
+let cglibPkgConfig = "gio-2.0"
+#else
+let cglibPkgConfig = "gio-unix-2.0"
+#endif
+
 let package = Package(
     name: "GLib",
     products: [ .library(name: "GLib", targets: ["GLib"]) ],
@@ -10,7 +16,7 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.3.0"),
     ],
     targets: [
-        .systemLibrary(name: "CGLib", pkgConfig: "gio-unix-2.0",
+        .systemLibrary(name: "CGLib", pkgConfig: cglibPkgConfig,
             providers: [
                 .brew(["glib", "glib-networking", "gobject-introspection"]),
                 .apt(["libglib2.0-dev", "glib-networking", "gobject-introspection", "libgirepository1.0-dev"])
