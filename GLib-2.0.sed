@@ -50,3 +50,4 @@ s/class ByteArray/class ByteArrayBase/
 s/``Array``/``ArrayType``/g
 s/``Error``/``GLibError``/g
 s|Dir(gconstpointer: gconstpointer(result))|result.map { Dir(retainingCPointer: $0) }|
+s|g_main_context_pusher_new(main_context_ptr)$|g_main_context_pusher_new(main_context_ptr)?.assumingMemoryBound(to: GMainContextPusher.self)|

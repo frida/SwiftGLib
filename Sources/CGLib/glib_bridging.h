@@ -66,9 +66,12 @@ struct _GUnixSocketAddressPrivate {};
 struct _GUri {};
 struct _GVariant {};
 struct _GVariantType {};
-#if GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 84
+// `GMainContextPusher` is typedef'd to `void` in GLib 2.64+ (gmain.h),
+// which Clang does not import as a Swift type. Declare a dummy struct
+// so generated code can spell `UnsafeMutablePointer<GMainContextPusher>`
+// regardless of the GLib version. The typedef and the struct live in
+// different C namespaces and coexist without conflict.
 struct GMainContextPusher {};
-#endif
 struct GMutexLocker {};
 struct GTestCase {};
 struct GTestSuite {};
