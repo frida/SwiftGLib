@@ -9,3 +9,8 @@ MainContextPusher
 HAVE_GNUC_VARARGS
 HAVE_GNUC_VISIBILITY
 win32_get_system_data_dirs_for_module
+spawn_async
+spawn_async_with_fds
+spawn_async_with_pipes
+spawn_async_with_pipes_and_fds
+win32_new_stream_socket
