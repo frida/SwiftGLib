@@ -242,6 +242,9 @@ struct _GDtlsServerConnection {};
 struct _GTreeNode {};
 struct _GStrvBuilder {};
 
+struct _GIPTosMessage {};
+struct _GIPv6TclassMessage {};
+
 #define GLIB_DISABLE_DEPRECATION_WARNINGS
 #define G_SETTINGS_ENABLE_BACKEND
 #if !defined(_WIN32)
