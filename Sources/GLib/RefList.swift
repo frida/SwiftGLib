@@ -53,6 +53,7 @@ public class RefList<Element: PointerWrapper>: List, RefListProtocol, Expressibl
     public var freeNodes = false
     /// `true` to deallocate the associated elements on deinit.
     public var freeElements = false
+    public var releaseElement: GDestroyNotify?
     /// Array literal initialiser
     ///
     /// This initialiser will always allocate memory for the given elements
@@ -80,12 +81,22 @@ public class RefList<Element: PointerWrapper>: List, RefListProtocol, Expressibl
         super.init(raw: p)
     }
 
+    @inlinable public convenience init(owning p: UnsafeMutableRawPointer, releasingElementsWith releaseElement: GDestroyNotify? = nil) {
+        self.init(raw: p)
+        freeNodes = true
+        self.releaseElement = releaseElement
+    }
+
     deinit {
-        guard freeNodes || freeElements else { return }
+        guard freeNodes || freeElements || releaseElement != nil else { return }
         var nextNode = self._ptr
         while let node = nextNode {
             nextNode = node.pointee.next
-            if freeElements { node.pointee.data.deallocate() }
+            if let releaseElement {
+                releaseElement(node.pointee.data)
+            } else if freeElements {
+                node.pointee.data.deallocate()
+            }
             if freeNodes { g_list_free_1(node) }
         }
     }

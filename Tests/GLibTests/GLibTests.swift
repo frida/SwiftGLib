@@ -333,6 +333,32 @@ class GLibTests: XCTestCase {
         XCTAssertEqual(tl.count, n)
     }
 
+    func testOwningReferenceSListReleasesElements() {
+        releasedElements = 0
+        do {
+            var nodes: UnsafeMutablePointer<GSList>? = nil
+            for _ in 0..<3 {
+                nodes = g_slist_prepend(nodes, UnsafeMutableRawPointer.allocate(byteCount: 1, alignment: 1))
+            }
+            let list = ReferenceSList<gpointer>(owning: UnsafeMutableRawPointer(nodes!), releasingElementsWith: releaseElement)
+            XCTAssertEqual(Array(list).count, 3)
+        }
+        XCTAssertEqual(releasedElements, 3)
+    }
+
+    func testOwningReferenceListReleasesElements() {
+        releasedElements = 0
+        do {
+            var nodes: UnsafeMutablePointer<GList>? = nil
+            for _ in 0..<3 {
+                nodes = g_list_prepend(nodes, UnsafeMutableRawPointer.allocate(byteCount: 1, alignment: 1))
+            }
+            let list = ReferenceList<gpointer>(owning: UnsafeMutableRawPointer(nodes!), releasingElementsWith: releaseElement)
+            XCTAssertEqual(Array(list).count, 3)
+        }
+        XCTAssertEqual(releasedElements, 3)
+    }
+
     func testReferenceSequence() {
         let tl: TypedSequence = [0, 1, 2, 3, 4, 5]
         let a: SequenceIterRef = tl.startIndex
@@ -422,4 +448,11 @@ class GLibTests: XCTestCase {
         XCTAssertEqual(array1.stringValue, array2.stringValue)
         XCTAssertNotEqual(array1.ptr, array2.ptr)
     }
+}
+
+nonisolated(unsafe) private var releasedElements = 0
+
+private let releaseElement: GDestroyNotify = { element in
+    element?.deallocate()
+    releasedElements += 1
 }
